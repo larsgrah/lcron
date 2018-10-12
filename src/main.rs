@@ -58,7 +58,6 @@ fn main() {
     loop {
         let sleep_timer = next_min_sleep(&cron_vec);
 
-        println!("sleeping: {}", sleep_timer);
         std::thread::sleep(Duration::from_millis((sleep_timer * 1000) as u64));
 
         exec_cron(&cron_vec);
@@ -81,6 +80,7 @@ fn print_cron(cron_item: &Cronproc) {
 
 fn next_min_sleep(crons: &Vec<Cronproc>) -> i64 {
     let mut timers: Vec<i64> = Vec::new();
+
     for cron_item in crons {
         timers.push(get_timer_from_cron(cron_item));
     }
@@ -89,9 +89,7 @@ fn next_min_sleep(crons: &Vec<Cronproc>) -> i64 {
 }
 
 fn exec_cron(crons: &Vec<Cronproc>) {
-    println!("executing cron jobs {}", crons.len());
     for cron_item in crons {
-        print_cron(&cron_item);
         if get_timer_from_cron(cron_item) <= 60 {
             Command::new(cron_item.cronprogram.to_string())
                 .arg(cron_item.cronargs.to_string())

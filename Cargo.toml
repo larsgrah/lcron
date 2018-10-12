@@ -4,4 +4,5 @@ version = "0.1.0"
 authors = ["lars <lars@kloud.software>"]
 
 [dependencies]
-job_scheduler = "1.0.5"
+cron = "0.6.0"
+chrono = "0.4.6"

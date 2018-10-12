@@ -1,0 +1,7 @@
+[package]
+name = "larscron"
+version = "0.1.0"
+authors = ["lars <lars@kloud.software>"]
+
+[dependencies]
+job_scheduler = "1.0.5"

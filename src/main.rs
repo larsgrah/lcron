@@ -54,14 +54,12 @@ fn main() {
 
     loop {
         let sleep_timer = next_min_sleep(&cron_vec);
-        let mut sleep:u64 = 0;
-        if sleep_timer - 100 >= 0 {
-            sleep = (sleep - 100) as u64;
-        }
 
-        std::thread::sleep(Duration::from_millis(sleep));
+        //println!("sleeping: {}", sleep_timer);
+        std::thread::sleep(Duration::from_millis((sleep_timer * 1000) as u64));
 
         exec_cron(&cron_vec);
+
     }
 }
 

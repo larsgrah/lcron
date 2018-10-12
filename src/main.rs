@@ -51,23 +51,32 @@ fn main() {
         cron_vec.push(cronprc);
     }
 
+    for cron_item in &cron_vec {
+        print_cron(&cron_item);
+    }
 
     loop {
         let sleep_timer = next_min_sleep(&cron_vec);
 
-        //println!("sleeping: {}", sleep_timer);
+        println!("sleeping: {}", sleep_timer);
         std::thread::sleep(Duration::from_millis((sleep_timer * 1000) as u64));
 
         exec_cron(&cron_vec);
-
     }
 }
 
 fn get_timer_from_cron(cron_item: &Cronproc) -> i64 {
     let utc: DateTime<Utc> = Utc::now();
     let schedule = Schedule::from_str(&cron_item.cronstr).unwrap();
-    let timer = (schedule.upcoming(Utc).take(1).next().unwrap().timestamp() - utc.timestamp());
+    let timer = schedule.upcoming(Utc).take(1).next().unwrap().timestamp() - utc.timestamp();
     timer
+}
+
+fn print_cron(cron_item: &Cronproc) {
+    println!("---------------");
+    println!("{} {}", cron_item.cronprogram, cron_item.cronargs);
+    println!("Next execution due: {}", get_timer_from_cron(&cron_item));
+    println!("---------------");
 }
 
 fn next_min_sleep(crons: &Vec<Cronproc>) -> i64 {
@@ -80,12 +89,14 @@ fn next_min_sleep(crons: &Vec<Cronproc>) -> i64 {
 }
 
 fn exec_cron(crons: &Vec<Cronproc>) {
+    println!("executing cron jobs {}", crons.len());
     for cron_item in crons {
+        print_cron(&cron_item);
         if get_timer_from_cron(cron_item) <= 60 {
             Command::new(cron_item.cronprogram.to_string())
                 .arg(cron_item.cronargs.to_string())
                 .spawn()
-                .expect("sh command failed to start"); 
+                .expect("sh command failed to start");
         }
     }
 }

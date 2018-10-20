@@ -22,7 +22,13 @@ struct Cronproc<'a> {
 
 fn main() {
     let path = env::home_dir().unwrap().to_str().unwrap().to_owned() + "/.larscrontab";
-    let f = File::open(path).expect("~/.larscrontab file is missing");
+    let f = match File::open(&path) {
+        Ok(fd) => fd,
+        Err(e) => {
+            eprintln!("Could not find {}. Please create it first!", &path);
+            ::std::process::exit(1);
+        }
+    };
     let f = BufReader::new(f);
     let mut cron_vec: Vec<Cronproc> = Vec::new();
 

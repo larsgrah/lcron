@@ -24,7 +24,7 @@ fn main() {
     let path = env::home_dir().unwrap().to_str().unwrap().to_owned() + "/.larscrontab";
     let f = match File::open(&path) {
         Ok(fd) => fd,
-        Err(e) => {
+        Err(_e) => {
             eprintln!("Could not find {}. Please create it first!", &path);
             ::std::process::exit(1);
         }

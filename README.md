@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/larsgrah/lcron.svg?branch=master)](https://travis-ci.com/larsgrah/lcron)
+
 # lcron
 larscron - a rudimentary cron-like daemon, written in rust, made for userlevel and userland execution
 

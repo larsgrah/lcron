@@ -1,10 +1,10 @@
 extern crate cron;
 extern crate chrono;
+extern crate dirs;
 
-use std::env;
 use std::process::Command;
 use std::time::Duration;
-use std::io::{self, BufReader};
+use std::io::BufReader;
 use std::io::prelude::*;
 use std::fs::File;
 use std::borrow::Cow;
@@ -21,7 +21,13 @@ struct Cronproc<'a> {
 }
 
 fn main() {
-    let path = env::home_dir().unwrap().to_str().unwrap().to_owned() + "/.larscrontab";
+    let path = dirs::home_dir()
+        .expect("no home dir found")
+        .to_str()
+        .expect("could not build path to cronfile")
+        .to_owned()
+        + "/.larscrontab";
+
     let f = match File::open(&path) {
         Ok(fd) => fd,
         Err(_e) => {
